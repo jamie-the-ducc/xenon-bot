@@ -2,6 +2,8 @@
 
 [Xe]non is a Discord bot written in Python for general server use and moderation.
 
+![Xenon Bot](/app/img/preview.png?raw=true)
+
 ## Installation
 
 Clone the repository from GitHub. Then create a virtual environment, and install all the dependencies.
