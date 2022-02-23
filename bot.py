@@ -137,7 +137,6 @@ async def ping(ctx:commands.Context):
 async def avatar(ctx:commands.Context, user:discord.Member=None):
     if user == None:
         user = ctx.author
-    print(user)
     name = f"avatar {user}"
     await ctx.reply(f"> <@!{user.id}>'s avatar:\n> {user.avatar.url}")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
