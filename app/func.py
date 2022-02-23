@@ -86,6 +86,7 @@ def read_config():
         )
         create_config()
         print(f'{good} Created "config.ini" successfully')
+        print(f"{info} Make sure to re-run the program :)")
         title()
         read_config()
 
