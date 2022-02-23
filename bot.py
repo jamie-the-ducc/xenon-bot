@@ -35,10 +35,11 @@ BOT_OWNER = "[Jam!3]#4466"
 GUILDS_JSON = Path.cwd() / "app" / "guilds.json"
 
 
-LOG_TEMPLATE = Template(f" {Style.DIM}$time{Style.RESET_ALL}{w}\t{Fore.BLACK}{Back.WHITE}$type{Style.RESET_ALL}{w}\t$action\t{Fore.GREEN}$command\t{Fore.YELLOW}$channel\t{Fore.CYAN}$user{w}:{Fore.BLUE}$id{w}")
-logger = lambda type,action,command,channel,user,uid:print(LOG_TEMPLATE.substitute(time=get_time(), type=type, action=action, command=command, channel=channel, user=user, id=uid))
-print(LOG_TEMPLATE.substitute(time=get_time(), type="INFO", action="CommandRecieved", command="x.ping", channel="#bot-commands", user="Jamie#0000", id=604855154365300753))
-input(LOG_TEMPLATE.substitute(time=get_time(), type="INFO", action="ResponseSent", command="178ms", channel="#bot-commands", user="Jamie#0000", id=604855154365300753))
+# --- Alternative one-liner logger (WIP) --- #
+#LOG_TEMPLATE = Template(f" {Style.DIM}$time{Style.RESET_ALL}{w}\t{Fore.BLACK}{Back.WHITE}$type{Style.RESET_ALL}{w}\t$action\t{Fore.GREEN}$command\t{Fore.YELLOW}$channel\t{Fore.CYAN}$user{w}:{Fore.BLUE}$id{w}")
+#logger = lambda type,action,command,channel,user,uid:print(LOG_TEMPLATE.substitute(time=get_time(), type=type, action=action, command=command, channel=channel, user=user, id=uid))
+#print(LOG_TEMPLATE.substitute(time=get_time(), type="INFO", action="CommandRecieved", command="x.ping", channel="#bot-commands", user="Jamie#0000", id=604855154365300753))
+#input(LOG_TEMPLATE.substitute(time=get_time(), type="INFO", action="ResponseSent", command="178ms", channel="#bot-commands", user="Jamie#0000", id=604855154365300753))
 
 title()
 
