@@ -7,9 +7,13 @@
 Clone the repository from GitHub. Then create a virtual environment, and install all the dependencies.
 
 ```bash
-git clone https://github.com/username/foobar.git
-cd xenon
+git clone https://github.com/EnbyCosmog/xenon-bot
+cd xenon-bot
 pip install -r requirements.txt
+```
+Make sure you have `discord.py` uninstalled first:
+```bash
+pip uninstall -y discord.py
 ```
 
 ## Usage
