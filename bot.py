@@ -18,14 +18,12 @@ from string import Template
 
 import discord
 import discord.errors
-from colorama import Fore, Style, Back
-# from discord import slash_command
+from colorama import Back, Fore, Style
 from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-#from app.command import command_manager
-from app.func import clear, get_time, read_config, title
+from app.func import get_time, read_config, title
 
 
 w = Style.BRIGHT + Fore.WHITE
@@ -49,7 +47,6 @@ prefix, token, webhook, owner, status_delay = [i[1] for i in read_config()]
 activities = ["the birds sing 💛", "the trees sway 💚", "the fire crackle ❤️", "the wind whisper 💜", "the rain fall 💙"]
 
 intents = discord.Intents.all()
-# intents.message_content = True
 
 client = commands.Bot(
     command_prefix=prefix,
@@ -137,7 +134,6 @@ async def set_welcome_channel(ctx, channel: discord.TextChannel):
 async def hello(ctx: commands.Context):
     name = "hello"
     await ctx.reply(f"Hello, {ctx.author.display_name}!")
-    #logger("INFO", "CommandRecieved", name, ctx.channel, ctx.author, ctx.author.id)
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
@@ -146,7 +142,6 @@ async def ping(ctx: commands.Context):
     name = "ping"
     ping = int(round(client.latency,3)*1000)
     await ctx.reply(f"Pong! {ping}ms")
-    #logger("INFO", "CommandRecieved", name, ctx.channel, ctx.author, ctx.author.id)
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
     print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
     
@@ -157,7 +152,6 @@ async def avatar(ctx: commands.Context, user):
     if not user:
         user = ctx.author
     await ctx.reply(f"<@!{user.id}>'s avatar: {user.avatar_url}")
-    #logger("INFO", "CommandRecieved", name, ctx.channel, ctx.author, ctx.author.id)
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
     
     
@@ -166,7 +160,6 @@ async def set_(ctx: commands.Context, arg):
     name = "set" + arg
     if arg == "welcome":
         await set_welcome_channel(ctx, ctx.channel)
-        #logger("INFO", "CommandRecieved", name, ctx.channel, ctx.author, ctx.author.id)
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
         print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{ctx.channel}{w}")
     
@@ -187,18 +180,6 @@ async def status_change():
             status=discord.Status.idle,
         )
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Status changed to {Fore.YELLOW}Listening to {activity}{w}")
-
-
-# ------------ needed for on_message() + client.command ------------
-#@client.event
-#async def on_message(message):
-#    await client.process_commands(message)
-
-
-# ------------ attempt at slash commands ------------
-#@slash_command(description="Say hello")
-#async def hi(ctx):
-#    await ctx.respond(f"Hello, @<{ctx.author.id}>!", ephemeral=True)
 
 
 status_change.start()
