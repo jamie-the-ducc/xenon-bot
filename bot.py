@@ -23,7 +23,7 @@ from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-from app.func import get_time, read_config, title
+from app.func import get_time, read_config, title, display_bot_info
 
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
@@ -35,9 +35,16 @@ GUILDS_JSON = Path.cwd() / "app" / "guilds.json"
 
 title()
 
-prefix, token, webhook, owner, status_delay = [i[1] for i in read_config()]
+activities = [ # unused
+    "the birds sing 💛",
+    "the trees sway 💚",
+    "the fire crackle ❤️",
+    "the wind whisper 💜",
+    "the rain fall 💙",
+]
 
-activities = ["the birds sing 💛", "the trees sway 💚", "the fire crackle ❤️", "the wind whisper 💜", "the rain fall 💙"]
+prefix, token, webhook, owner, activities, status_delay = [i[1] for i in read_config()]
+activities = activities.split(',')
 
 intents = discord.Intents.all()
 
@@ -52,111 +59,90 @@ client = commands.Bot(
 # ON READY
 @client.event
 async def on_ready():
-    ready_time = get_time()
-    title()
-    length_a = len(f"║ [+] Connected to Discord.com as {client.user} ({client.user.id})") - 1
-    length_b = len(f"║ [>] Status set to Listening to {activities[-1]}")
-    length = length_a + 1 if length_a > length_b else length_b + 1
-        
-    header = " ╔" + " Bot Information ".center(length, "═") + "╗"
-    connect_len = length - length_b
-    status_len = length - length_a
-    guild_len = length - len(f"║ [>] Watching {len(client.guilds)} server(s) ⭐")
-    prefix_len = length - len(f"║ [>] Prefix set to {prefix}")
-    ready_len = length - len(f"║ [>] Bot ready at {ready_time}")
-    
-    print(header)
-    print(f" ║{GOOD} Connected to Discord.com as {Fore.GREEN}{client.user}{w} ({Style.DIM}{client.user.id}{Style.RESET_ALL}{w})" + " " * status_len + "║")
-    print(f" ║{INFO} Watching {Fore.YELLOW}{len(client.guilds)} server(s){w} ⭐" + " " * guild_len + "║")
-    print(f" ║{INFO} Prefix set to {Fore.YELLOW}{prefix}{w} " + " " * prefix_len + "║")
-    print(f" ║{INFO} Status set to {Fore.YELLOW}Listening to {activities[-1]}{w}" + " " * connect_len + "║")
-    print(f" ║{INFO} Bot ready at {Fore.YELLOW}{ready_time}{w} " + " " * ready_len + "║")
-    print(" ╚" + "═" * length + "╝")
+    print(display_bot_info(client, prefix, activities))
 
 
 # ON MEMBER JOIN
 @client.event
 async def on_member_join(member):
-    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Welcome! {Fore.YELLOW}{member}{w} has {Fore.GREEN}joined{w} the server.")  
-    with open(GUILDS_JSON, 'r', encoding='utf-8') as f:
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Welcome! {Fore.YELLOW}{member}{w} has {Fore.GREEN}joined{w} the server.")
+    with open(GUILDS_JSON, "r", encoding="utf-8") as f:
         guilds_dict = json.load(f)
 
     channel_id = guilds_dict[str(member.guild.id)]
-    await client.get_channel(int(channel_id)).send(f'{member.mention} welcome to the server! Enjoy your stay! 💜')
+    await client.get_channel(int(channel_id)).send(f"{member.mention} welcome to the server! Enjoy your stay! 💜")
 
 
 # ON MEMBER REMOVE
 @client.event
 async def on_member_remove(member):
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Goodbye! {Fore.YELLOW}{member}{w} has {Fore.RED}left{w} the server.")
-    
-    
+
+
 # ON GULD JOIN
 @client.event
 async def on_guild_join(guild):
-    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.GREEN}added{w} to server {Fore.YELLOW}{guild}{w}.") 
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.GREEN}added{w} to server {Fore.YELLOW}{guild}{w}.")
 
 
 # ON GUILD REMOVE
 @client.event
 async def on_guild_remove(guild):
-    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.RED}removed{w} from server {Fore.YELLOW}{guild}{w}.") 
-    with open(GUILDS_JSON, 'r', encoding='utf-8') as f:
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.RED}removed{w} from server {Fore.YELLOW}{guild}{w}.")
+    with open(GUILDS_JSON, "r", encoding="utf-8") as f:
         guilds_dict = json.load(f)
 
     guilds_dict.pop(guild.id)
-    with open(GUILDS_JSON, 'w', encoding='utf-8') as f:
+    with open(GUILDS_JSON, "w", encoding="utf-8") as f:
         json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
 
 
 # SET WELCOME CHANNEL
-@client.command(name='welcome')
+@client.command(name="welcome")
 async def set_welcome_channel(ctx, channel: discord.TextChannel):
-    with open(GUILDS_JSON, 'r', encoding='utf-8') as f:
+    with open(GUILDS_JSON, "r", encoding="utf-8") as f:
         guilds_dict = json.load(f)
 
     guilds_dict[str(ctx.guild.id)] = str(channel.id)
-    with open(GUILDS_JSON, 'w', encoding='utf-8') as f:
+    with open(GUILDS_JSON, "w", encoding="utf-8") as f:
         json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
-    
-    await ctx.send(f'> Set welcome channel for `{ctx.message.guild.name}` to <#{channel.id}>')
+
+    await ctx.send(f"> Set welcome channel for `{ctx.message.guild.name}` to <#{channel.id}>")
 
 
 # CLIENT COMMANDS
-@client.command(name="hello") # x.hello
+@client.command(name="hello")  # x.hello
 async def hello(ctx: commands.Context):
     name = "hello"
     await ctx.reply(f"Hello, {ctx.author.display_name}!")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-@client.command(name="ping") # x.ping
+@client.command(name="ping")  # x.ping
 async def ping(ctx: commands.Context):
     name = "ping"
-    ping = int(round(client.latency,3)*1000)
+    ping = int(round(client.latency, 3) * 1000)
     await ctx.reply(f"Pong! {ping}ms")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
     print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
-    
-    
-@client.command(name="avatar") # x.avatar
+
+
+@client.command(name="avatar")  # x.avatar
 async def avatar(ctx: commands.Context, user):
-    name = "avatar"    
+    name = "avatar"
     if not user:
         user = ctx.author
     await ctx.reply(f"<@!{user.id}>'s avatar: {user.avatar_url}")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-    
-    
-@client.command(name="set") # x.set <arg>
+
+
+@client.command(name="set")  # x.set <arg>
 async def set_(ctx: commands.Context, arg):
     name = "set" + arg
     if arg == "welcome":
         await set_welcome_channel(ctx, ctx.channel)
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
         print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{ctx.channel}{w}")
-    
-    
 # END OF CLIENT COMMANDS
 
 
@@ -169,9 +155,7 @@ async def status_change():
         await client.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.listening, name=activity
-            ),
-            status=discord.Status.idle,
-        )
+            ), status=discord.Status.idle)
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Status changed to {Fore.YELLOW}Listening to {activity}{w}")
 
 
