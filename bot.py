@@ -1,21 +1,21 @@
-# [Xe]non.py Discord Bot
+# [Xe]non Bot for Discord
 # Written with 💜 by [Jam!3]#4466
-# Initial start: 15/02/2022
+# Began: 15/02/2022
 
 # ----------------------------------------------- #
-#  ____  __   __
-# | _\ \/ /__|_ |_ __   ___  _ __    _ __  _   _
-# | | \  // _ \ | '_ \ / _ \| '_ \  | '_ \| | | |
-# | | /  \  __/ | | | | (_) | | | |_| |_) | |_| |
-# | |/_/\_\___| |_| |_|\___/|_| |_(_) .__/ \__, |
-# |__|       |__|    version 1.1    |_|    |___/
+#  ____  __   __                                  #
+# | _\ \/ /__|_ |_ __   ___  _ __    _ __  _   _  #
+# | | \  // _ \ | '_ \ / _ \| '_ \  | '_ \| | | | #
+# | | /  \  __/ | | | | (_) | | | |_| |_) | |_| | #
+# | |/_/\_\___| |_| |_|\___/|_| |_(_) .__/ \__, | #
+# |__|       |__|    version 0.1    |_|    |___/  #
 # ----------------------------------------------- #
 
 import json
 from asyncio import sleep
 from pathlib import Path
-from string import Template
 
+import aiohttp
 import discord
 import discord.errors
 from colorama import Back, Fore, Style
@@ -25,7 +25,6 @@ from discord.ext.tasks import loop
 from app.__version__ import __version__
 from app.func import get_time, read_config, title
 
-
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
 BAD = f" {w}[{Fore.RED}x{w}]"
@@ -33,13 +32,6 @@ INFO = f" {w}[{Fore.BLUE}>{w}]"
 INPUT = f" {w}[{Fore.YELLOW}-{w}]"
 BOT_OWNER = "[Jam!3]#4466"
 GUILDS_JSON = Path.cwd() / "app" / "guilds.json"
-
-
-# --- Alternative one-liner logger (WIP) --- #
-#LOG_TEMPLATE = Template(f" {Style.DIM}$time{Style.RESET_ALL}{w}\t{Fore.BLACK}{Back.WHITE}$type{Style.RESET_ALL}{w}\t$action\t{Fore.GREEN}$command\t{Fore.YELLOW}$channel\t{Fore.CYAN}$user{w}:{Fore.BLUE}$id{w}")
-#logger = lambda type,action,command,channel,user,uid:print(LOG_TEMPLATE.substitute(time=get_time(), type=type, action=action, command=command, channel=channel, user=user, id=uid))
-#print(LOG_TEMPLATE.substitute(time=get_time(), type="INFO", action="CommandRecieved", command="x.ping", channel="#bot-commands", user="Jamie#0000", id=604855154365300753))
-#input(LOG_TEMPLATE.substitute(time=get_time(), type="INFO", action="ResponseSent", command="178ms", channel="#bot-commands", user="Jamie#0000", id=604855154365300753))
 
 title()
 
@@ -189,3 +181,5 @@ try:
     client.run(token, reconnect=True)
 except discord.errors.LoginFailure:
     print(f"{BAD} Improper token passed ({Fore.YELLOW}config.ini{w})")
+except aiohttp.client_exceptions.ClientConnectorError:
+    print(f"{BAD} Failed to connect to {Fore.YELLOW}discord.com{w} (try again later)")
