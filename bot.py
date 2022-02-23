@@ -99,30 +99,36 @@ async def on_guild_remove(guild):
 
 # SET WELCOME CHANNEL
 @client.command(name="welcome")
-async def set_welcome_channel(ctx, channel: discord.TextChannel):
-    with open(GUILDS_JSON, "r", encoding="utf-8") as f:
-        guilds_dict = json.load(f)
+async def set_welcome_channel(ctx, channel:discord.TextChannel=None):
+    if channel == None:
+        await ctx.reply(f"> Missing argument! Proper usage: `{prefix}welcome <#channel>`")
+    else:
+        name = "welcome #" + channel.name
+        with open(GUILDS_JSON, "r", encoding="utf-8") as f:
+            guilds_dict = json.load(f)
 
-    guilds_dict[str(ctx.guild.id)] = str(channel.id)
-    with open(GUILDS_JSON, "w", encoding="utf-8") as f:
-        json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
+        guilds_dict[str(ctx.guild.id)] = str(channel.id)
+        with open(GUILDS_JSON, "w", encoding="utf-8") as f:
+            json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
 
-    await ctx.send(f"> Set welcome channel for `{ctx.message.guild.name}` to <#{channel.id}>")
+        await ctx.reply(f"> Set welcome channel for `{ctx.message.guild.name}` to <#{channel.id}>")
+        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+        print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{channel.name}{w} ({Style.DIM}{channel.id}{Style.RESET_ALL}{w})")
 
 
 # CLIENT COMMANDS
 @client.command(name="hello")  # x.hello
 async def hello(ctx: commands.Context):
     name = "hello"
-    await ctx.reply(f"Hello, {ctx.author.display_name}!")
+    await ctx.reply(f"> Hello, {ctx.author.display_name}!")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
 @client.command(name="ping")  # x.ping
-async def ping(ctx: commands.Context):
+async def ping(ctx:commands.Context):
     name = "ping"
     ping = int(round(client.latency, 3) * 1000)
-    await ctx.reply(f"Pong! {ping}ms")
+    await ctx.reply(f"> Pong! {ping}ms")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
     print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
 
@@ -134,15 +140,6 @@ async def avatar(ctx: commands.Context, user):
         user = ctx.author
     await ctx.reply(f"<@!{user.id}>'s avatar: {user.avatar_url}")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-
-
-@client.command(name="set")  # x.set <arg>
-async def set_(ctx: commands.Context, arg):
-    name = "set" + arg
-    if arg == "welcome":
-        await set_welcome_channel(ctx, ctx.channel)
-        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{ctx.channel}{w}")
 # END OF CLIENT COMMANDS
 
 
@@ -153,9 +150,9 @@ async def status_change():
         await sleep(status_delay)
         activity = activities[id]
         await client.change_presence(
-            activity=discord.Activity(
-                type=discord.ActivityType.listening, name=activity
-            ), status=discord.Status.idle)
+            activity=discord.Activity(type=discord.ActivityType.listening, name=activity), 
+            status=discord.Status.idle
+        )
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Status changed to {Fore.YELLOW}Listening to {activity}{w}")
 
 
