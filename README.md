@@ -1,6 +1,6 @@
 # [Xe]non Bot
 
-[Xe]non is a Discord bot written in Python for general server use and moderation.
+[Xe]non is a Discord bot written in Python for general server use and moderation. (*COMPLETELY WIP AT THE MOMENT*)
 
 ![Xenon Bot](/app/img/preview.png?raw=true)
 
