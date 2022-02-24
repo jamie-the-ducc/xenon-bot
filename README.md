@@ -29,23 +29,25 @@ run.bat
 ```
 If you're running the script for the first time, you'll need to fill out some information for the `config.ini` file. It stores important variables such as your bot token and prefix.
 
-## Commands
-`<arg>` = required
+## Bot Features
+### Functionality:
+- Welcomes/says goodbye to members as they join/leave the server
+  - need set welcome channel first (`welcome <#channel_tag>`) 
+- Responds to commands (see below)
 
-`[arg]` = optional
-
-commands sepparated with a comma ( , ) do the same thing
 ### Prefix commands:
+
+| `<arg>` = required | `[arg]` = optional |
+|--------------------|--------------|
 
 | Command            | Argument     | Function                                       |
 |--------------------|--------------|------------------------------------------------|
-| hello, reply | None         | replies to the sender                          |
+| hello, reply       | None         | replies to the sender                          |
 | ping               | None         | replies with bot latency (ms)                  |
 | avatar [arg]       | @user_tag    | sends profile picture of mentioned user        |
-| rick, rickroll    | None         | sends rick roll gif 🙏                          |
+| rick, rickroll     | None         | sends rick roll gif                            |
 | info               | None         | replies with bot name and the developers       |
-| welcome \<arg>      | #channel_tag | sets the tagged channel to the welcome channel |
-
+| welcome \<arg>     | #channel_tag | sets the tagged channel to the welcome channel |
 
  
 
