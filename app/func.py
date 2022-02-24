@@ -16,7 +16,6 @@ INFO = f" {w}[{Fore.BLUE}>{w}]"
 
 
 reply_dict = {
-    "hi":"> Hello!",
     "rick roll":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
     "info":"> I'm Xenon Bot! Coded by `[Jam!3]#4466`",
     "reply":"> I replied!",
@@ -25,7 +24,8 @@ reply_dict = {
 
 
 reply_dict_noprefix = {
-    "hi":"> Hello!",
+    "hi":"> Hi!",
+    "hello": "> Hello!",
     "rick":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
     "rick roll":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
     "reply":"> I replied!",
