@@ -64,6 +64,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    await client.process_commands(message)
     name = message.content
     msg = name.removeprefix(prefix)
     if msg in reply_dict and message.author is not client.user:
