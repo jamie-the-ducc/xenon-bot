@@ -15,6 +15,17 @@ GOOD = f" {w}[{Fore.GREEN}+{w}]"
 INFO = f" {w}[{Fore.BLUE}>{w}]"
 
 
+reply_dict = {
+    "hi":"Hello!",
+    "rickroll":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
+    "info":"I'm Xenon Bot! Coded by [Jam!3]#4466",
+    "reply":"I replied!",
+    "love":"I💜U",
+    "mad":"😡",
+    "happy":"😊",
+    "sad":"😢",
+}
+
 def clear() -> None:
     """Clears the terminal using the os.system function"""
     system("cls" if name in ("nt", "dos") else "clear")

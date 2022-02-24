@@ -23,7 +23,7 @@ from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-from app.func import get_time, read_config, title, display_bot_info
+from app.func import get_time, read_config, title, display_bot_info, reply_dict
 
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
@@ -60,6 +60,15 @@ client = commands.Bot(
 @client.event
 async def on_ready():
     print(display_bot_info(client, prefix, activities))
+
+
+@client.event
+async def on_message(message):
+    name = message.content
+    msg = name.removeprefix(prefix)
+    if msg in reply_dict and message.author is not client.user:
+        await message.reply(reply_dict[msg])
+        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{name}{w} in {Fore.YELLOW}#{message.channel}{w} from {Fore.YELLOW}{message.author} {w}({Style.DIM}{message.author.id}{Style.RESET_ALL}{w})")
 
 
 # ON MEMBER JOIN
