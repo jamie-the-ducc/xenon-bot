@@ -54,6 +54,7 @@ client = commands.Bot(
     intents=intents,
     activity=discord.Activity(type=discord.ActivityType.listening, name=activities[-1]),
     status=discord.Status.idle,
+    owner_id=owner,
 )
 
 
