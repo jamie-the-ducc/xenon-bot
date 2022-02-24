@@ -8,7 +8,7 @@
 
 ## Installation
 
-Clone the repository from GitHub. Then create a virtual environment, and install all the dependencies.
+Clone the repository from GitHub. Then install all the dependencies.
 
 ```bash
 git clone https://github.com/EnbyCosmog/xenon-bot
@@ -27,7 +27,7 @@ Open `run.bat` to run the script.
 ```bash
 run.bat
 ```
-If you're running the script for the first time, you'll need to fill out some information for the `config.ini` file. Whihc stores important variables such as your bot token and prefix.
+If you're running the script for the first time, you'll need to fill out some information for the `config.ini` file. It stores important variables such as your bot token and prefix.
 
 ## Contributing
 
