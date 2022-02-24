@@ -23,7 +23,8 @@ from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-from app.func import get_time, read_config, title, display_bot_info, reply_dict
+from app.func import get_time, read_config, title, display_bot_info
+from app.func import reply_dict, reply_dict_noprefix
 
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
@@ -63,19 +64,22 @@ async def on_ready():
 
 
 @client.event
-async def on_message(message):
+async def on_message(message:discord.Message):
     await client.process_commands(message)
     name = message.content
     msg = name.removeprefix(prefix)
-    if msg in reply_dict and message.author is not client.user:
+    # clean up later
+    if name.startswith(prefix) and msg in reply_dict and message.author is not client.user:
         await message.reply(reply_dict[msg])
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{name}{w} in {Fore.YELLOW}#{message.channel}{w} from {Fore.YELLOW}{message.author} {w}({Style.DIM}{message.author.id}{Style.RESET_ALL}{w})")
-
+    elif msg in reply_dict_noprefix and message.author is not client.user:
+        await message.reply(reply_dict_noprefix[msg])
+        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{name}{w} in {Fore.YELLOW}#{message.channel}{w} from {Fore.YELLOW}{message.author} {w}({Style.DIM}{message.author.id}{Style.RESET_ALL}{w})")
 
 # ON MEMBER JOIN
 @client.event
-async def on_member_join(member):
-    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Welcome! {Fore.YELLOW}{member}{w} has {Fore.GREEN}joined{w} the server.")
+async def on_member_join(member:discord.Member):
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Welcome! {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) has {Fore.GREEN}joined{w} the server.")
     with open(GUILDS_JSON, "r", encoding="utf-8") as f:
         guilds_dict = json.load(f)
 
@@ -85,20 +89,20 @@ async def on_member_join(member):
 
 # ON MEMBER REMOVE
 @client.event
-async def on_member_remove(member):
-    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Goodbye! {Fore.YELLOW}{member}{w} has {Fore.RED}left{w} the server.")
+async def on_member_remove(member:discord.Member):
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Goodbye! {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) has {Fore.RED}left{w} the server.")
 
 
 # ON GULD JOIN
 @client.event
-async def on_guild_join(guild):
-    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.GREEN}added{w} to server {Fore.YELLOW}{guild}{w}.")
+async def on_guild_join(guild:discord.Guild):
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.GREEN}added{w} to server {Fore.YELLOW}{guild}{w} ({Style.DIM}{guild.id}{Style.RESET_ALL}{w}).")
 
 
 # ON GUILD REMOVE
 @client.event
-async def on_guild_remove(guild):
-    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.RED}removed{w} from server {Fore.YELLOW}{guild}{w}.")
+async def on_guild_remove(guild:discord.Guild):
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.RED}removed{w} from server {Fore.YELLOW}{guild}{w} ({Style.DIM}{guild.id}{Style.RESET_ALL}{w}).")
     with open(GUILDS_JSON, "r", encoding="utf-8") as f:
         guilds_dict = json.load(f)
 
@@ -127,15 +131,15 @@ async def set_welcome_channel(ctx, channel:discord.TextChannel=None):
 
 
 # CLIENT COMMANDS
-@client.command(name="hello")  # x.hello
-async def hello(ctx: commands.Context):
+@client.command()
+async def hello(ctx:commands.Context):
     name = "hello"
     await ctx.reply(f"> Hello, {ctx.author.display_name}!")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-@client.command(name="ping")  # x.ping
-async def ping(ctx:commands.Context):
+@client.command(name="ping")
+async def bot_latency(ctx:commands.Context):
     name = "ping"
     ping = int(round(client.latency, 3) * 1000)
     await ctx.reply(f"> Pong! {ping}ms")
@@ -143,7 +147,7 @@ async def ping(ctx:commands.Context):
     print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
 
 
-@client.command(name="avatar")  # x.avatar
+@client.command()
 async def avatar(ctx:commands.Context, user:discord.Member=None):
     if user == None:
         user = ctx.author

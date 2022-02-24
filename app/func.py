@@ -17,15 +17,24 @@ INFO = f" {w}[{Fore.BLUE}>{w}]"
 
 reply_dict = {
     "hi":"> Hello!",
-    "rickroll":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
-    "info":"> I'm Xenon Bot! Coded by [Jam!3]#4466",
+    "rick roll":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
+    "info":"> I'm Xenon Bot! Coded by `[Jam!3]#4466`",
     "reply":"> I replied!",
-    "love":"> I💜U",
+    "invite":"> Add me to your server!\n> https://discord.com/api/oauth2/authorize?client_id=943021878367359016&permissions=8&scope=bot"
+}
+
+
+reply_dict_noprefix = {
+    "hi":"> Hello!",
+    "rick":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
+    "rick roll":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
+    "reply":"> I replied!",
     "mad":"😡",
     "happy":"😊",
     "sad":"😢",
-    "invite":"> Add me to your server!\n> https://discord.com/api/oauth2/authorize?client_id=943021878367359016&permissions=8&scope=bot"
+    "love":"> I💜U",
 }
+
 
 def clear() -> None:
     """Clears the terminal using the os.system function"""
