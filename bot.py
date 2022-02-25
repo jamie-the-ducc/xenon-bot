@@ -16,6 +16,7 @@ import sys
 from asyncio import sleep
 from io import StringIO
 from pathlib import Path
+from datetime import datetime, timezone
 
 import aiohttp
 import discord
@@ -114,33 +115,32 @@ async def on_guild_remove(guild:discord.Guild):
 
 
 # SET WELCOME CHANNEL
-@client.command(name="welcome")
+@client.command(name="welcome", aliases=['w', 'setwelcome'])
 async def set_welcome_channel(ctx, channel:discord.TextChannel=None):
     if channel == None:
-        await ctx.reply(f"> Missing argument! Proper usage: `{prefix}welcome <#channel>`")
-    else:
-        name = "welcome #" + channel.name
-        with open(GUILDS_JSON, "r", encoding="utf-8") as f:
-            guilds_dict = json.load(f)
+        channel = ctx.message.channel
+    name = "welcome #" + channel.name
+    with open(GUILDS_JSON, "r", encoding="utf-8") as f:
+        guilds_dict = json.load(f)
 
-        guilds_dict[str(ctx.guild.id)] = str(channel.id)
-        with open(GUILDS_JSON, "w", encoding="utf-8") as f:
-            json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
+    guilds_dict[str(ctx.guild.id)] = str(channel.id)
+    with open(GUILDS_JSON, "w", encoding="utf-8") as f:
+        json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
 
-        await ctx.reply(f"> Set welcome channel for `{ctx.message.guild.name}` to <#{channel.id}>")
-        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{channel.name}{w} ({Style.DIM}{channel.id}{Style.RESET_ALL}{w})")
+    await ctx.reply(f"> Set welcome channel for `{ctx.message.guild.name}` to {channel.mention}")
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{channel.name}{w} ({Style.DIM}{channel.id}{Style.RESET_ALL}{w})")
 
 
 # CLIENT COMMANDS
-@client.command()
+@client.command(aliases=['greet'])
 async def hello(ctx:commands.Context):
     name = "hello"
     await ctx.reply(f"> Hello, {ctx.author.display_name}!")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-@client.command(name="ping")
+@client.command(name="ping", aliases=['l', 'latency'])
 async def bot_latency(ctx:commands.Context):
     name = "ping"
     ping = int(round(client.latency, 3) * 1000)
@@ -149,16 +149,28 @@ async def bot_latency(ctx:commands.Context):
     print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
 
 
-@client.command()
+@client.command(aliases=['p', 'pfp', 'profile'])
 async def avatar(ctx:commands.Context, user:discord.Member=None):
     if user == None:
         user = ctx.author
     name = f"avatar {user}"
-    await ctx.reply(f"> <@!{user.id}>'s avatar:\n> {user.avatar.url}")
+    await ctx.reply(f"> {user.mention}'s avatar:\n> {user.avatar.url}")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-@client.command(name="shutdown")
+@client.command(name="howold", aliases=['o', 'old', 'age'])
+async def discord_timestamp(ctx:commands.Context, user:discord.Member=None):
+    if user == None:
+        user = ctx.author
+    name = f"howold {user}"
+    date = user.created_at.replace(tzinfo=timezone.utc)
+    utc_time = datetime.now(timezone.utc)
+    diff = utc_time - date
+    await ctx.reply(f"> Your account is: `{str(diff).split(',')[0]} old`\n> Created on: `{date.strftime('%d-%m-%Y %H:%M:%S UTC')}`")
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+
+
+@client.command(name="shutdown", aliases=['sd', 'off', 'exit'])
 @commands.is_owner()
 async def shutdown_bot(ctx:commands.Context):
     name = "shutdown"
@@ -171,6 +183,7 @@ async def shutdown_bot(ctx:commands.Context):
 @commands.is_owner()
 async def code_evaluation(ctx, *, code):
     code = strip_codeblock(code)
+    name = 'eval'
     secret = {
         "discord": discord,
         "commands": commands,
@@ -183,10 +196,8 @@ async def code_evaluation(ctx, *, code):
         "builtins": None,
         "token": "not.gonna.leak.my.token",
     }
-
     old_stdout = sys.stdout
     sys.stdout = mystdout = StringIO()
-
     try:
         old_stdout = sys.stdout
         exec(code)
@@ -196,6 +207,7 @@ async def code_evaluation(ctx, *, code):
         result = e
     reply = "```py\n" + result + "\n```"
     await ctx.reply(reply)
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 # END OF CLIENT COMMANDS
 
 
