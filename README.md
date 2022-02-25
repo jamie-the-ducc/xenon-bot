@@ -43,12 +43,13 @@ If you're running the script for the first time, you'll need to fill out some in
 | Command            | Argument     | Function                                       |
 |--------------------|--------------|------------------------------------------------|
 | hello, reply       | None         | replies to the sender                          |
+| info               | None         | replies with bot and developers names          |
 | ping               | None         | replies with bot latency (ms)                  |
+| welcome \<arg>     | #channel_tag | sets the tagged channel to the welcome channel |
 | avatar [arg]       | @user_tag    | sends profile picture of mentioned user        |
 | rick, rickroll     | None         | sends rick roll gif                            |
-| info               | None         | replies with bot name and the developers       |
-| welcome \<arg>     | #channel_tag | sets the tagged channel to the welcome channel |
-
+| shutdown           | None         | owner only, turns off the bot(`client.close()`)|
+| eval [arg]       | Python codeblock| evaluates python codeblock and returns results|
  
 
 ## Contributing
