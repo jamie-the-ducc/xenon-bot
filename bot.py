@@ -116,6 +116,7 @@ async def on_guild_remove(guild:discord.Guild):
 
 # SET WELCOME CHANNEL
 @client.command(name="welcome", aliases=['w', 'setwelcome'])
+@commands.has_permissions(administrator=True)
 async def set_welcome_channel(ctx, channel:discord.TextChannel=None):
     if channel == None:
         channel = ctx.message.channel
