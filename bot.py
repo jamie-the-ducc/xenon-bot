@@ -170,7 +170,7 @@ async def discord_timestamp(ctx:commands.Context, user:discord.Member=None):
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-@client.command(name="shutdown", aliases=['sd', 'off', 'exit'])
+@client.command(name="shutdown", aliases=['sd', 'exit'])
 @commands.is_owner()
 async def shutdown_bot(ctx:commands.Context):
     name = "shutdown"
