@@ -34,12 +34,23 @@ reply_dict_noprefix = {
     "happy":"😊",
     "sad":"😢",
     "love":"> I💜U",
+    "flush":"<:flush_v2:946581195737665577>"
 }
 
 
 def clear() -> None:
     """Clears the terminal using the os.system function"""
     system("cls" if name in ("nt", "dos") else "clear")
+
+
+def strip_codeblock(codeblock:str) -> str:
+    if codeblock.startswith("```") and codeblock.endswith("```"):
+        codeblock = codeblock.removeprefix('```')
+        codeblock = codeblock.removesuffix('```')
+        codeblock = codeblock.removeprefix('py')
+        codeblock = codeblock.removeprefix('\n')
+        codeblock = codeblock.removesuffix('\n')
+    return codeblock
 
 
 def title() -> None:
