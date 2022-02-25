@@ -25,7 +25,7 @@ from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-from app.func import (strip_codeblockp, display_bot_info, get_time, read_config, reply_dict, reply_dict_noprefix, title)
+from app.func import (strip_codeblock, display_bot_info, get_time, read_config, reply_dict, reply_dict_noprefix, title)
 
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
