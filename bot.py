@@ -14,9 +14,9 @@
 import json
 import sys
 from asyncio import sleep
+from datetime import datetime, timezone
 from io import StringIO
 from pathlib import Path
-from datetime import datetime, timezone
 
 import aiohttp
 import discord
@@ -26,7 +26,7 @@ from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-from app.func import (strip_codeblock, display_bot_info, get_time, read_config, reply_dict, reply_dict_noprefix, title)
+from app.func import (display_bot_info, get_time, read_config, reply_dict, reply_dict_noprefix, strip_codeblock, title)
 
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
