@@ -12,7 +12,9 @@
 # ----------------------------------------------- #
 
 import json
+import sys
 from asyncio import sleep
+from io import StringIO
 from pathlib import Path
 
 import aiohttp
@@ -23,8 +25,7 @@ from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-from app.func import get_time, read_config, title, display_bot_info
-from app.func import reply_dict, reply_dict_noprefix
+from app.func import (strip_codeblockp, display_bot_info, get_time, read_config, reply_dict, reply_dict_noprefix, title)
 
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
@@ -155,6 +156,46 @@ async def avatar(ctx:commands.Context, user:discord.Member=None):
     name = f"avatar {user}"
     await ctx.reply(f"> <@!{user.id}>'s avatar:\n> {user.avatar.url}")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+
+
+@client.command(name="shutdown")
+@commands.is_owner()
+async def shutdown_bot(ctx:commands.Context):
+    name = "shutdown"
+    await ctx.reply("> Turning off bot...")
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+    await client.close()
+    
+    
+@client.command(name="eval", aliases=["e"])
+@commands.is_owner()
+async def code_evaluation(ctx, *, code):
+    code = strip_codeblock(code)
+    secret = {
+        "discord": discord,
+        "commands": commands,
+        "bot": client,
+        "ctx": ctx,
+        "channel": ctx.channel,
+        "author": ctx.author,
+        "guild": ctx.guild,
+        "message": ctx.message,
+        "builtins": None,
+        "token": "not.gonna.leak.my.token",
+    }
+
+    old_stdout = sys.stdout
+    sys.stdout = mystdout = StringIO()
+
+    try:
+        old_stdout = sys.stdout
+        exec(code)
+        sys.stdout = old_stdout
+        result = mystdout.getvalue()
+    except Exception as e:
+        result = e
+    reply = "```py\n" + result + "\n```"
+    await ctx.reply(reply)
 # END OF CLIENT COMMANDS
 
 
