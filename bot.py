@@ -114,7 +114,15 @@ async def on_guild_remove(guild:discord.Guild):
         json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
 
 
-# SET WELCOME CHANNEL
+# CLIENT COMMANDS
+@client.event
+async def on_command_error(ctx, error):
+    #if isinstance(error, commands.MissingRequiredArgument):
+    #    await ctx.reply('> Please psas in the required arguments')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.reply("> You don't have sufficient permissions to use this command")
+
+
 @client.command(name="welcome", aliases=['w', 'setwelcome'])
 @commands.has_permissions(administrator=True)
 async def set_welcome_channel(ctx, channel:discord.TextChannel=None):
@@ -133,7 +141,6 @@ async def set_welcome_channel(ctx, channel:discord.TextChannel=None):
     print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{channel.name}{w} ({Style.DIM}{channel.id}{Style.RESET_ALL}{w})")
 
 
-# CLIENT COMMANDS
 @client.command(aliases=['greet'])
 async def hello(ctx:commands.Context):
     name = "hello"
@@ -151,20 +158,20 @@ async def bot_latency(ctx:commands.Context):
 
 
 @client.command(aliases=['p', 'pfp', 'profile'])
-async def avatar(ctx:commands.Context, user:discord.Member=None):
-    if user == None:
-        user = ctx.author
-    name = f"avatar {user}"
-    await ctx.reply(f"> {user.mention}'s avatar:\n> {user.avatar.url}")
+async def avatar(ctx:commands.Context, member:discord.Member=None):
+    if member == None:
+        member = ctx.author
+    name = f"avatar {member}"
+    await ctx.reply(f"> {member.mention}'s avatar:\n> {member.avatar.url}")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
 @client.command(name="howold", aliases=['o', 'old', 'age'])
-async def discord_timestamp(ctx:commands.Context, user:discord.Member=None):
-    if user == None:
-        user = ctx.author
-    name = f"howold {user}"
-    date = user.created_at.replace(tzinfo=timezone.utc)
+async def discord_timestamp(ctx:commands.Context, member:discord.Member=None):
+    if member == None:
+        member = ctx.author
+    name = f"howold {member}"
+    date = member.created_at.replace(tzinfo=timezone.utc)
     utc_time = datetime.now(timezone.utc)
     diff = utc_time - date
     await ctx.reply(f"> Your account is: `{str(diff).split(',')[0]} old`\n> Created on: `{date.strftime('%d-%m-%Y %H:%M:%S UTC')}`")
@@ -182,7 +189,10 @@ async def shutdown_bot(ctx:commands.Context):
     
 @client.command(name="eval", aliases=["e"])
 @commands.is_owner()
-async def code_evaluation(ctx, *, code):
+async def code_evaluation(ctx:commands.Context, *, code=None):
+    if code == None:
+        await ctx.reply("> Please attach a code block to this command!")
+        return
     code = strip_codeblock(code)
     name = 'eval'
     secret = {
@@ -209,6 +219,52 @@ async def code_evaluation(ctx, *, code):
     reply = "```py\n" + result + "\n```"
     await ctx.reply(reply)
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+
+
+@client.command(name="ban")
+@commands.has_permissions(ban_members=True)
+async def ban_member(ctx:commands.Context, member:discord.Member=None, *, reason="No reason provided"):
+    if member == None:
+        await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
+        return
+    name = f"ban"
+    await member.send(f"> Sorry! You have been banned from `{ctx.message.guild}` for the following reason:\n```{reason}```")
+    await member.ban(reason=reason)
+    await ctx.reply(f"> {member.name} has been successfully banned from `{ctx.message.guild}` for the following reason:\n```{reason}```")
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Banned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason {Fore.YELLOW}{reason}{w}")
+
+
+@client.command(name="kick")
+@commands.has_permissions(kick_members=True)
+async def kick_member(ctx:commands.Context, member:discord.Member=None, *, reason="No reason provided"):
+    if member == None:
+        await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
+        return
+    name = "kick"
+    await member.send(f"> Sorry! You have been kicked from `{ctx.message.guild}` for the following reason:\n```{reason}```")
+    await member.kick(reason=reason)
+    await ctx.reply(f"> {member.name} has been successfully kicked from `{ctx.message.guild}` for the following reason:\n```{reason}```")
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason {Fore.YELLOW}{reason}{w}")
+
+
+@client.command(name="unban")
+@commands.has_permissions(administrator=True)
+async def unban_member(ctx:commands.Context, *, member:discord.Member=None):
+    if member == None:
+        await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
+        return
+    name = "unban"
+    banned_users = await ctx.guild.bans()
+    for ban_entry in banned_users:
+        user = ban_entry.user
+        if (user.name, user.discriminator) == (member.name, member.discriminator):
+            await ctx.guild.unban(user)
+            await ctx.send(f'> Unbanned {user.name} ({user.mention})')
+            print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+            print(" " * 12 + f"{Fore.CYAN}└>{w} Unbanned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w})")
+            return
 # END OF CLIENT COMMANDS
 
 
