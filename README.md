@@ -42,15 +42,15 @@ If you're running the script for the first time, you'll need to fill out some in
 
 | Command            | Argument         | Function                                          |
 |--------------------|------------------|---------------------------------------------------|
-| hello, reply       | None             | replies to the sender                             |
-| info               | None             | replies with bot and developers names             |
-| ping               | None             | replies with bot latency (ms)                     |
-| welcome \[arg]     | #channel_tag     | sets the tagged channel to the welcome channel    |
-| avatar <arg>       | @user_tag        | sends profile picture of mentioned user           |
-| rick, rickroll     | None             | sends rick roll gif                               |
-| shutdown           | None             | owner only - turns off the bot (`client.close()`) |
-| eval [arg]         | Python codeblock | evaluates python codeblock and returns results    |
- 
+| hello, greet       | none             | replies to the sender                             |
+| info               | none             | replies with bot and developers names             |
+| l, ping, latency               | none             | replies with bot latency (ms)                     |
+| w, welcome, setwelcome `<arg>`     | #channel_tag     | sets the tagged channel to the welcome channel    |
+| p, pfp, profile, avatar `<arg>`       | @user_tag        | sends profile picture of mentioned user           |
+| rick, rickroll     | none             | sends rick roll gif                               |
+| sd, shutdown, exit           | none             | owner only - turns off the bot (`client.close()`) |
+| e, eval `[arg]`         | codeblock | evaluates python code and returns results    |
+| o, old, age, howold `<arg>` | @user_tag | returns account age + creation date
 
 ## Contributing
 
