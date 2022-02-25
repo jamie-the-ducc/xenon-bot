@@ -40,17 +40,17 @@ If you're running the script for the first time, you'll need to fill out some in
 | `[arg]` = required | `<arg>` = optional |
 |--------------------|--------------|
 
-| Command            | Argument         | Function                                          |
-|--------------------|------------------|---------------------------------------------------|
-| hello, greet       | none             | replies to the sender                             |
-| info               | none             | replies with bot and developers names             |
-| l, ping, latency               | none             | replies with bot latency (ms)                     |
-| w, welcome, setwelcome `<arg>`     | #channel_tag     | sets the tagged channel to the welcome channel    |
-| p, pfp, profile, avatar `<arg>`       | @user_tag        | sends profile picture of mentioned user           |
-| rick, rickroll     | none             | sends rick roll gif                               |
-| sd, shutdown, exit           | none             | owner only - turns off the bot (`client.close()`) |
-| e, eval `[arg]`         | codeblock | evaluates python code and returns results    |
-| o, old, age, howold `<arg>` | @user_tag | returns account age + creation date
+| Type     | Command                          | Argument         | Function                                           |
+|----------|----------------------------------|------------------|----------------------------------------------------|
+| bot      | l, ping, latency                 | none             | replies with bot latency (ms)                      |
+| general  | hello, greet                     | none             | replies to the sender                              |
+| general  | info                             | none             | replies with bot and developers names              |
+| general  | rick, rickroll                   | none             | sends rick roll gif                                |
+| general  | p, pfp, profile, avatar `<arg>`  | @user_tag        | sends profile picture of mentioned user            |
+| general  | o, old, age, howold `<arg>`      | @user_tag        | returns account age + creation date                |
+| admin    | w, welcome, setwelcome `<arg>`   | #channel_tag     | sets the tagged channel to the welcome channel     |
+| owner    | sd, shutdown, exit               | none             | owner only - turns off the bot (`client.close()`)  |
+| owner    | e, eval `[arg]`                  | codeblock        | evaluates python code and returns results          |
 
 ## Contributing
 
