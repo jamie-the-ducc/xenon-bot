@@ -271,48 +271,27 @@ async def unban_member(ctx:commands.Context, *, member:discord.Member=None):
 
 
 @client.command(name='base64encode', aliases=['b64e', 'b64encode', 'base64e'])
-async def base64_code(ctx:commands.Context, code_type=None, base64_string=None):
-    if code_type == None or base64_string == None:
-        await ctx.reply("> Please include a code type (`decode`/`encode`) as well as the message you want to change")
+async def base64_code(ctx:commands.Context, *, base64_string=None):
+    if base64_string == None:
+        await ctx.reply("> Please include the message you want to encode to base64!")
         return
-    name = f'base64 {code_type}'
-    print(code_type)
-    if code_type.lower() == 'decode':
-        print('decode')
-        code = b64decode(base64_string).decode('utf8')
-    elif code_type.lower() == 'encode':
-        print('encode')
-        code =  b64encode(f"{base64_string}".encode()).decode("utf8")
-    else:
-        await ctx.reply("> Error: Invalid code type detected")
-        return
-    print(code)
-    await ctx.reply(f"> Successfully converted `{base64_string}`:\n```{code}```")
+    name = 'base64encode'
+    code = b64encode(f"{base64_string}".encode()).decode("utf8")
+    await ctx.reply(f"> Successfully encoded `{base64_string}`:\n```{code}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-    print(" " * 12 + f"{Fore.CYAN}└>{w} Converted {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Encoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
 
 
-@client.command(name='base64', aliases=['b64'])
-async def base64_code(ctx:commands.Context, code_type=None, *, base64_string=None):
-    if code_type == None or base64_string == None:
-        await ctx.reply("> Please include a code type (`decode`/`encode`) as well as the message you want to change")
+@client.command(name='base64decode', aliases=['b64d', 'b64decode', 'base64d'])
+async def base64_code(ctx:commands.Context, *, base64_string=None):
+    if base64_string == None:
+        await ctx.reply("> Please include the message you want to decode from base64!")
         return
-    name = f'base64 {code_type}'
-    print(code_type)
-    if code_type.lower() == 'decode':
-        print('decode')
-        code = b64decode(base64_string).decode('utf8')
-    elif code_type.lower() == 'encode':
-        print('encode')
-        code =  b64encode(f"{base64_string}".encode()).decode("utf8")
-    else:
-        await ctx.reply("> Error: Invalid code type detected")
-        return
-    print(code)
-    await ctx.reply(f"> Successfully converted `{base64_string}`:\n```{code}```")
+    name = 'base64decode'
+    code = b64decode(base64_string).decode('utf8')
+    await ctx.reply(f"> Successfully decoded `{base64_string}`:\n```{code}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-    print(" " * 12 + f"{Fore.CYAN}└>{w} Converted {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
-    
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Decoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
     
 # END OF CLIENT COMMANDS
 
