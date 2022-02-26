@@ -48,7 +48,13 @@ If you're running the script for the first time, you'll need to fill out some in
 | general  | rick, rickroll                   | none             | sends rick roll gif                                |
 | general  | p, pfp, profile, avatar `<arg>`  | @user_tag        | sends profile picture of mentioned user            |
 | general  | o, old, age, howold `<arg>`      | @user_tag        | returns account age + creation date                |
+| general  | base64encode, b64e `[arg]`       | string           | returns string encoded in base64                   |
+| general  | base64decode, b64d `[arg]`       | string           | returns decoded string from base64                 |
 | admin    | w, welcome, setwelcome `<arg>`   | #channel_tag     | sets the tagged channel to the welcome channel     |
+| admin    | kick `[arg]` `<arg>`             | @user_tag, reason| kicks mentioned member from the server             |
+| admin    | ban `[arg]` `<arg>`              | @user_tag, reason| bans mentioned member from the server              |
+| admin    | unban `[arg]`                    | @user_tag        | unbans mentioned banned member                     |
+| admin    | timeout, to, tmout `[arg]` `[arg]` `<arg>` | @user_tag, time (minutes), reason| timeouts mentioned member for x amount of time |
 | owner    | sd, shutdown, exit               | none             | owner only - turns off the bot (`client.close()`)  |
 | owner    | e, eval `[arg]`                  | codeblock        | evaluates python code and returns results          |
 
