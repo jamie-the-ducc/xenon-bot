@@ -14,7 +14,7 @@
 import json
 import sys
 from asyncio import sleep
-from datetime import datetime, timezone
+from datetime import timedelta, datetime, timezone
 from io import StringIO
 from pathlib import Path
 from base64 import b64encode, b64decode
@@ -225,7 +225,7 @@ async def code_evaluation(ctx:commands.Context, *, code=None):
 
 @client.command(name="ban")
 @commands.has_permissions(ban_members=True)
-async def ban_member(ctx:commands.Context, member:discord.Member=None, *, reason="No reason provided"):
+async def ban_member(ctx:commands.Context, member:discord.Member=None, *, reason:str="No reason provided"):
     if member == None:
         await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
         return
@@ -239,7 +239,7 @@ async def ban_member(ctx:commands.Context, member:discord.Member=None, *, reason
 
 @client.command(name="kick")
 @commands.has_permissions(kick_members=True)
-async def kick_member(ctx:commands.Context, member:discord.Member=None, *, reason="No reason provided"):
+async def kick_member(ctx:commands.Context, member:discord.Member=None, *, reason:str="No reason provided"):
     if member == None:
         await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
         return
@@ -249,6 +249,22 @@ async def kick_member(ctx:commands.Context, member:discord.Member=None, *, reaso
     await ctx.reply(f"> {member.name} has been successfully kicked from `{ctx.message.guild}` for the following reason:\n```{reason}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
     print(" " * 12 + f"{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason {Fore.YELLOW}{reason}{w}")
+
+
+@client.command(name="timeout", aliases=['to', 'tmout'])
+@commands.has_permissions(moderate_members=True)
+async def timeout_member(ctx:commands.Context, member:discord.Member=None, minutes:int=None, *, reason:str="No reason provided"):
+    if member == None:
+        await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
+        return
+    name = "timeout"
+    duration = datetime.timedelta(minutes=minutes)
+    await member.timeout_for(duration, reason=reason)
+    await member.timeout_for(reason=reason)
+    await ctx.reply(f"Member timed out for {minutes} minutes for the following reason:\n```{reason}```")
+    await member.send(f"> Sorry! You have been timed out for {minutes} minutes in `{ctx.message.guild}` for the following reason:\n```{reason}```")
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Timed out user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for {Fore.YELLOW}{minutes} minutes{w} for reason {Fore.YELLOW}{reason}{w}")
 
 
 # Doesn't work :(
