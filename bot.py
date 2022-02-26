@@ -296,7 +296,7 @@ async def base64_code(ctx:commands.Context, *, base64_string=None):
         return
     name = 'base64encode'
     code = b64encode(f"{base64_string}".encode()).decode("utf8")
-    await ctx.reply(f"> Successfully encoded `{base64_string}`:\n```{code}```")
+    await ctx.reply(f"> Successfully encoded `{base64_string}`:\n```py\n{code}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
     print(" " * 12 + f"{Fore.CYAN}└>{w} Encoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
 
@@ -308,7 +308,7 @@ async def base64_code(ctx:commands.Context, *, base64_string=None):
         return
     name = 'base64decode'
     code = b64decode(base64_string).decode('utf8')
-    await ctx.reply(f"> Successfully decoded `{base64_string}`:\n```{code}```")
+    await ctx.reply(f"> Successfully decoded `{base64_string}`:\n```py\n{code}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
     print(" " * 12 + f"{Fore.CYAN}└>{w} Decoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
     
