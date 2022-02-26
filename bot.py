@@ -234,7 +234,7 @@ async def ban_member(ctx:commands.Context, member:discord.Member=None, *, reason
     await member.ban(reason=reason)
     await ctx.reply(f"> {member.name} has been successfully banned from `{ctx.message.guild}` for the following reason:\n```{reason}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-    print(" " * 12 + f"{Fore.CYAN}└>{w} Banned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason {Fore.YELLOW}{reason}{w}")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Banned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
 
 
 @client.command(name="kick")
@@ -248,23 +248,26 @@ async def kick_member(ctx:commands.Context, member:discord.Member=None, *, reaso
     await member.kick(reason=reason)
     await ctx.reply(f"> {member.name} has been successfully kicked from `{ctx.message.guild}` for the following reason:\n```{reason}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-    print(" " * 12 + f"{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason {Fore.YELLOW}{reason}{w}")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
 
 
+# doesn't work :/
 @client.command(name="timeout", aliases=['to', 'tmout'])
 @commands.has_permissions(moderate_members=True)
 async def timeout_member(ctx:commands.Context, member:discord.Member=None, minutes:int=None, *, reason:str="No reason provided"):
     if member == None:
-        await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
+        await ctx.reply(f"> Please tag a user to use this command! ({ctx.author.mention})")
         return
+    if minutes == None:
+        await ctx.reply(f"> Please include the amount of minutes you want to time out a member for!")
     name = "timeout"
-    duration = datetime.timedelta(minutes=minutes)
+    duration = timedelta(minutes=minutes)
+    print(duration)
     await member.timeout_for(duration, reason=reason)
-    await member.timeout_for(reason=reason)
-    await ctx.reply(f"Member timed out for {minutes} minutes for the following reason:\n```{reason}```")
-    await member.send(f"> Sorry! You have been timed out for {minutes} minutes in `{ctx.message.guild}` for the following reason:\n```{reason}```")
+    await ctx.reply(f"> {member.mention} timed out for `{minutes} minute(s)` for the following reason:\n```{reason}```")
+    await member.send(f"> Sorry! You have been timed out for `{minutes} minute(s)` in `{ctx.message.guild}` for the following reason:\n```{reason}```")
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-    print(" " * 12 + f"{Fore.CYAN}└>{w} Timed out user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for {Fore.YELLOW}{minutes} minutes{w} for reason {Fore.YELLOW}{reason}{w}")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Timed out member {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for {Fore.YELLOW}{minutes} minute(s){w} for reason: {Fore.YELLOW}{reason}{w}")
 
 
 # Doesn't work :(
