@@ -1,5 +1,7 @@
-import sys
+import contextlib
+import textwrap
 from io import StringIO
+from traceback import format_exception
 
 import discord
 from colorama import Fore, Style
@@ -15,7 +17,7 @@ prefix = [i[1] for i in read_config()][0]
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-   
+
 
     @commands.command(name="shutdown", aliases=['sd', 'exit'])
     @commands.is_owner()
@@ -26,15 +28,16 @@ class Owner(commands.Cog):
         await self.bot.close()
         
         
-    @commands.command(name="eval", aliases=["e"])
+    @commands.command(name="eval", aliases=["e", "exec", "evaluate"])
     @commands.is_owner()
-    async def code_evaluation(self, ctx:commands.Context, *, code=None):
+    async def _eval(self, ctx:commands.Context, *, code=None):
         if code == None:
             await ctx.reply("> Please attach a code block to this command!")
             return
         code = strip_codeblock(code)
         name = 'eval'
-        secret = {
+        
+        local_variables = {
             "discord": discord,
             "commands": commands,
             "bot": self.bot,
@@ -43,19 +46,23 @@ class Owner(commands.Cog):
             "author": ctx.author,
             "guild": ctx.guild,
             "message": ctx.message,
-            "builtins": None,
             "token": "not.gonna.leak.my.token",
         }
-        old_stdout = sys.stdout
-        sys.stdout = mystdout = StringIO()
+        
+        stdout = StringIO()
         try:
-            old_stdout = sys.stdout
-            exec(code)
-            sys.stdout = old_stdout
-            result = mystdout.getvalue()
+            with contextlib.redirect_stdout(stdout):
+                exec(
+                    f"async def func():\n{textwrap.indent(code, '    ')}", local_variables,
+                )
+                obj = await local_variables["func"]()
+                result = f"{stdout.getvalue()}\n-- {obj}\n"
+            msg = ":white_check_mark: Code executed successfully"
         except Exception as e:
-            result = e
-        reply = "```py\n" + result + "\n```"
+            result = "".join(format_exception(e, e, e.__traceback__))
+            msg = "<:no:947393772071825418> Code failed with the following error:"
+            
+        reply = f"{msg}\n```bash\n{result}\n```"
         await ctx.reply(reply)
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
