@@ -18,11 +18,11 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     # source: https://stackoverflow.com/a/64772835
-    @commands.command(name="welcome", aliases=['w', 'setwelcome'])
+    @commands.command(name="welcome", aliases=["w", "setwelcome"])
     @commands.has_permissions(administrator=True)
-    async def set_welcome_channel(self, ctx:commands.Context, channel:discord.TextChannel=None):
+    async def set_welcome_channel(self, ctx: commands.Context, channel: discord.TextChannel = None):
+        """Sets channel that will be used to send messages on member join/leave"""
         if channel == None:
             channel = ctx.message.channel
         name = "welcome #" + channel.name
@@ -35,12 +35,12 @@ class Admin(commands.Cog):
 
         await ctx.reply(f"> Set welcome channel for `{ctx.message.guild.name}` to {channel.mention}")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{channel.name}{w} ({Style.DIM}{channel.id}{Style.RESET_ALL}{w})")
-      
-        
+        print(f"{' ' * 12}{Fore.CYAN}└>{w} Set welcome channel to {Fore.YELLOW}{channel.name}{w} ({Style.DIM}{channel.id}{Style.RESET_ALL}{w})")
+
     @commands.command(name="ban")
     @commands.has_permissions(ban_members=True)
-    async def ban_member(self, ctx:commands.Context, member:discord.Member=None, *, reason:str="No reason provided"):
+    async def ban_member(self, ctx: commands.Context, member: discord.Member = None, *, reason: str = "No reason provided"):
+        """Bans mentioned member"""
         if member == None:
             await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
             return
@@ -49,12 +49,12 @@ class Admin(commands.Cog):
         await member.ban(reason=reason)
         await ctx.reply(f"> {member.name} has been successfully banned from `{ctx.message.guild}` for the following reason:\n```{reason}```")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Banned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
-
+        print(f"{' ' * 12}{Fore.CYAN}└>{w} Banned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
 
     @commands.command(name="kick")
     @commands.has_permissions(kick_members=True)
-    async def kick_member(self, ctx:commands.Context, member:discord.Member=None, *, reason:str="No reason provided"):
+    async def kick_member(self, ctx: commands.Context, member: discord.Member = None, *, reason: str = "No reason provided"):
+        """Kicks mentioned member"""
         if member == None:
             await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
             return
@@ -63,12 +63,12 @@ class Admin(commands.Cog):
         await member.kick(reason=reason)
         await ctx.reply(f"> {member.name} has been successfully kicked from `{ctx.message.guild}` for the following reason:\n```{reason}```")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
+        print(f"{' ' * 12}{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
 
-
-    @commands.command(name="timeout", aliases=['t', 'tmout'])
-    @commands.has_permissions(administrator=True) # moderate_members=True
-    async def timeout_member(self, ctx:commands.Context, member:discord.Member=None, minutes:int=None, *, reason:str="No reason provided"):
+    @commands.command(name="timeout", aliases=["t", "tmout"])
+    @commands.has_permissions(administrator=True)  # moderate_members=True
+    async def timeout_member(self, ctx: commands.Context, member: discord.Member = None, minutes: int = None, *, reason: str = "No reason provided"):
+        """Times out mentioned member"""
         if member == None:
             await ctx.reply(f"> Please tag a user to use this command! ({ctx.author.mention})")
             return
@@ -81,13 +81,13 @@ class Admin(commands.Cog):
         await ctx.reply(f"> {member.mention} timed out for `{minutes} minute(s)` for the following reason:\n```{reason}```")
         await member.send(f"> Sorry! You have been timed out for `{minutes} minute(s)` in `{ctx.message.guild}` for the following reason:\n```{reason}```")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Timed out member {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for {Fore.YELLOW}{minutes} minute(s){w} for reason: {Fore.YELLOW}{reason}{w}")
-
+        print(f"{' ' * 12}{Fore.CYAN}└>{w} Timed out member {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for {Fore.YELLOW}{minutes} minute(s){w} for reason: {Fore.YELLOW}{reason}{w}")
 
     # doesn't work :/
     @commands.command(name="unban")
     @commands.has_permissions(administrator=True)
-    async def unban_member(self, ctx:commands.Context, *, member:discord.Member=None):
+    async def unban_member(self, ctx: commands.Context, *, member: discord.Member = None):
+        """Unbans mentioned member (non-functional)"""
         if member == None:
             await ctx.reply(f"Please tag a user to use this command! ({ctx.author.mention})")
             return
@@ -97,9 +97,9 @@ class Admin(commands.Cog):
             user = ban_entry.user
             if (user.name, user.discriminator) == (member.name, member.discriminator):
                 await ctx.guild.unban(user)
-                await ctx.send(f'> Unbanned {user.name} ({user.mention})')
+                await ctx.send(f"> Unbanned {user.name} ({user.mention})")
                 print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-                print(" " * 12 + f"{Fore.CYAN}└>{w} Unbanned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w})")
+                print(f"{' ' * 12}{Fore.CYAN}└>{w} Unbanned user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w})")
                 return
 
 
