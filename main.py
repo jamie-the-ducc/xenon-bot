@@ -52,8 +52,8 @@ intents = discord.Intents.default()
 intents.reactions = True
 intents.presences = True
 intents.members = True
-#intents.message_content = True
-intents = discord.Intents.all()
+intents.message_content = True
+#intents = discord.Intents.all()
 
 bot = commands.Bot(
     command_prefix=prefix,
