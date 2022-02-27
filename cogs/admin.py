@@ -66,7 +66,7 @@ class Admin(commands.Cog):
         print(f"{' ' * 12}{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
 
     @commands.command(name="timeout", aliases=["t", "tmout"])
-    @commands.has_permissions(administrator=True)  # moderate_members=True
+    @commands.has_permissions(moderate_members=True)
     async def timeout_member(self, ctx: commands.Context, member: discord.Member = None, minutes: int = None, *, reason: str = "No reason provided"):
         """Times out mentioned member"""
         if member == None:
@@ -76,10 +76,9 @@ class Admin(commands.Cog):
             await ctx.reply(f"> Please include the amount of minutes you want to time out a member for!")
         name = "timeout"
         duration = timedelta(minutes=minutes)
-        print(duration)
         await member.timeout_for(duration, reason=reason)
-        await ctx.reply(f"> {member.mention} timed out for `{minutes} minute(s)` for the following reason:\n```{reason}```")
-        await member.send(f"> Sorry! You have been timed out for `{minutes} minute(s)` in `{ctx.message.guild}` for the following reason:\n```{reason}```")
+        await ctx.reply(f"> <:timeout:947404285598113914> {member.mention} timed out for `{minutes} minute(s)` for the following reason:\n```{reason}```")
+        await member.send(f"> <:timeout:947404285598113914> Sorry! You have been timed out for `{minutes} minute(s)` in `{ctx.message.guild}` for the following reason:\n```{reason}```")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
         print(f"{' ' * 12}{Fore.CYAN}└>{w} Timed out member {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for {Fore.YELLOW}{minutes} minute(s){w} for reason: {Fore.YELLOW}{reason}{w}")
 
