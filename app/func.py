@@ -105,23 +105,25 @@ def create_config() -> None:
         config.write(configfile)
 
 
-def read_config():
+def read_config(init=False):
     """Reads the bot configuration file (config.ini) and returns a config object"""
-    print(f'{INFO} Checking for "config.ini"...')
+    if init:
+        print(f'{INFO} Checking for "config.ini"...')
     file = Path.cwd() / "config.ini"
     config = ConfigParser()
 
     if isfile(file):
         config.read(file)
-        print(f'{GOOD} Loaded "config.ini" successfully')
+        if init:
+            print(f'{GOOD} Loaded "config.ini" successfully')
         return convert_config(config["Xenon"].items())
     else:
-        print(
-            f"{BAD} Failed to find config file. Please enter the following configuration information:"
-        )
+        if init:
+            print(f"{BAD} Failed to find config file. Please enter the following configuration information:")
         create_config()
-        print(f'{GOOD} Created "config.ini" successfully')
-        print(f"{INFO} Make sure to re-run the program :)")
+        if init:
+            print(f'{GOOD} Created "config.ini" successfully')
+            print(f"{INFO} Make sure to re-run the program :)")
         title()
         read_config()
 
@@ -144,24 +146,24 @@ def convert_config(items):
     return result
 
 
-def display_bot_info(client, prefix:str, activities:list):
+def display_bot_info(bot, prefix:str, activities:list):
     ready_time = get_time()
     title()
     
-    length_a = (len(f"║ [+] Connected to Discord.com as {client.user} ({client.user.id})") - 1)
+    length_a = (len(f"║ [+] Connected to Discord.com as {bot.user} ({bot.user.id})") - 1)
     length_b = len(f"║ [>] Status set to Listening to {activities[-1]}")
     length = length_a + 1 if length_a > length_b else length_b + 1
 
     header = " ╔" + " Bot Information ".center(length, "═") + "╗"
     connect_len = length - length_b
     status_len = length - length_a
-    guild_len = length - len(f"║ [>] Watching {len(client.guilds)} server(s) ⭐")
+    guild_len = length - len(f"║ [>] Watching {len(bot.guilds)} server(s) ⭐")
     prefix_len = length - len(f"║ [>] Prefix set to {prefix}")
     ready_len = length - len(f"║ [>] Bot ready at {ready_time}")
 
     bot_info = f"""{header}
- ║{GOOD} Connected to Discord.com as {Fore.GREEN}{client.user}{w} ({Style.DIM}{client.user.id}{Style.RESET_ALL}{w}){" " * status_len}║
- ║{INFO} Watching {Fore.YELLOW}{len(client.guilds)} server(s){w} ⭐{" " * guild_len}║
+ ║{GOOD} Connected to Discord.com as {Fore.GREEN}{bot.user}{w} ({Style.DIM}{bot.user.id}{Style.RESET_ALL}{w}){" " * status_len}║
+ ║{INFO} Watching {Fore.YELLOW}{len(bot.guilds)} server(s){w} ⭐{" " * guild_len}║
  ║{INFO} Prefix set to {Fore.YELLOW}{prefix}{w}{" " * prefix_len} ║
  ║{INFO} Status set to {Fore.YELLOW}Listening to {activities[-1]}{w}{" " * connect_len} ║
  ║{INFO} Bot ready at {Fore.YELLOW}{ready_time}{w}{" " * ready_len} ║
