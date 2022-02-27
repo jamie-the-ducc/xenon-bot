@@ -18,19 +18,17 @@ class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     @commands.command(name="shutdown", aliases=['sd', 'exit'])
     @commands.is_owner()
-    async def shutdown_bot(self, ctx:commands.Context):
+    async def shutdown_bot(self, ctx: commands.Context):
         name = "shutdown"
         await ctx.reply("> Turning off bot...")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
         await self.bot.close()
         
-        
     @commands.command(name="eval", aliases=["e", "exec", "evaluate"])
     @commands.is_owner()
-    async def _eval(self, ctx:commands.Context, *, code=None):
+    async def _eval(self, ctx: commands.Context, *, code = None):
         if code == None:
             await ctx.reply("> Please attach a code block to this command!")
             return

@@ -7,6 +7,7 @@ from discord.ext import commands
 
 from app.func import get_time, read_config, reply_dict, reply_dict_noprefix
 
+
 config = [i[1] for i in read_config()]
 prefix = config[0]
 activities = config[4].split(',')
@@ -22,7 +23,7 @@ class Bot(commands.Cog):
        
     # Error handler
     @commands.Cog.listener()
-    async def on_command_error(self, ctx:commands.Context, error):
+    async def on_command_error(self, ctx: commands.Context, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.reply('> Please pass in the required arguments')
         if isinstance(error, commands.MissingPermissions):
@@ -33,10 +34,8 @@ class Bot(commands.Cog):
             print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} {Fore.RED}Error:{w}", error)
             await ctx.reply(f"<:no:947393772071825418> An error occured while executing your command:\n```{error}```")
 
-
-    # works
     @commands.Cog.listener()
-    async def on_message(self, message:discord.Message):
+    async def on_message(self, message: discord.Message):
         #await self.bot.process_commands(message)
         name = message.content
         msg = name.removeprefix(prefix)
@@ -48,37 +47,27 @@ class Bot(commands.Cog):
             await message.reply(reply_dict_noprefix[msg])
             print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{name}{w} in {Fore.YELLOW}#{message.channel}{w} from {Fore.YELLOW}{message.author} {w}({Style.DIM}{message.author.id}{Style.RESET_ALL}{w})")
 
-
-    # works
     @commands.Cog.listener()
-    async def on_member_join(self, member:discord.Member):
+    async def on_member_join(self, member: discord.Member):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Welcome! {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) has {Fore.GREEN}joined{w} the server.")
         with open(GUILDS_JSON, "r", encoding="utf-8") as f:
             guilds_dict = json.load(f)
-
         channel_id = guilds_dict[str(member.guild.id)]
         await self.bot.get_channel(int(channel_id)).send(f"{member.mention} welcome to the server! Enjoy your stay! 💜")
 
-
-    # probably works as well
     @commands.Cog.listener()
-    async def on_member_remove(self, member:discord.Member):
+    async def on_member_remove(self, member: discord.Member):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Goodbye! {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) has {Fore.RED}left{w} the server.")
 
-
-    # works
     @commands.Cog.listener()
-    async def on_guild_join(self, guild:discord.Guild):
+    async def on_guild_join(self, guild: discord.Guild):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.GREEN}added{w} to server {Fore.YELLOW}{guild}{w} ({Style.DIM}{guild.id}{Style.RESET_ALL}{w}).")
 
-
-    # works
     @commands.Cog.listener()
-    async def on_guild_remove(self, guild:discord.Guild):
+    async def on_guild_remove(self, guild: discord.Guild):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Bot {Fore.RED}removed{w} from server {Fore.YELLOW}{guild}{w} ({Style.DIM}{guild.id}{Style.RESET_ALL}{w}).")
         with open(GUILDS_JSON, "r", encoding="utf-8") as f:
             guilds_dict = json.load(f)
-
         guilds_dict.pop(str(guild.id))
         with open(GUILDS_JSON, "w", encoding="utf-8") as f:
             json.dump(guilds_dict, f, indent=4, ensure_ascii=False)

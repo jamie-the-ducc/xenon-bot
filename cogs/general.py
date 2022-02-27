@@ -15,26 +15,23 @@ prefix = [i[1] for i in read_config()][0]
 class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        
 
     @commands.command(aliases=['greet'])
-    async def hello(self, ctx:commands.Context):
+    async def hello(self, ctx: commands.Context):
         name = "hello"
         await ctx.reply(f"> Hello, {ctx.author.display_name}!")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
-
     @commands.command(aliases=['p', 'pfp', 'profile'])
-    async def avatar(self, ctx:commands.Context, member:discord.Member=None):
+    async def avatar(self, ctx: commands.Context, member: discord.Member = None):
         if member == None:
             member = ctx.author
         name = f"avatar {member}"
         await ctx.reply(f"> {member.mention}'s avatar:\n> {member.avatar.url}")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
-
     @commands.command(name="howold", aliases=['o', 'old', 'age'])
-    async def discord_timestamp(self, ctx:commands.Context, member:discord.Member=None):
+    async def discord_timestamp(self, ctx: commands.Context, member: discord.Member = None):
         if member == None:
             member = ctx.author
         name = f"howold {member}"
@@ -44,9 +41,8 @@ class General(commands.Cog):
         await ctx.reply(f"> Your account is: `{str(diff).split(',')[0]} old`\n> Created on: `{date.strftime('%d-%m-%Y %H:%M:%S UTC')}`")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
-
     @commands.command(name='base64encode', aliases=['b64e', 'b64encode', 'base64e'])
-    async def base64_encode(self, ctx:commands.Context, *, base64_string=None):
+    async def base64_encode(self, ctx: commands.Context, *, base64_string: str = None):
         if base64_string == None:
             await ctx.reply("> Please include the message you want to encode to base64!")
             return
@@ -54,11 +50,10 @@ class General(commands.Cog):
         code = b64encode(f"{base64_string}".encode()).decode("utf8")
         await ctx.reply(f"> Successfully encoded `{base64_string}`:\n```py\n{code}```")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Encoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
-
+        print(f"{' ' * 12}{Fore.CYAN}└>{w} Encoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
 
     @commands.command(name='base64decode', aliases=['b64d', 'b64decode', 'base64d'])
-    async def base64_decode(self, ctx:commands.Context, *, base64_string=None):
+    async def base64_decode(self, ctx: commands.Context, *, base64_string: str = None):
         if base64_string == None:
             await ctx.reply("> Please include the message you want to decode from base64!")
             return
@@ -69,7 +64,7 @@ class General(commands.Cog):
             await ctx.reply("> Please send a valid base64 string!")
         await ctx.reply(f"> Successfully decoded `{base64_string}`:\n```py\n{code}```")
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Decoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
+        print(f"{' ' * 12}{Fore.CYAN}└>{w} Decoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
 
 
 def setup(bot):

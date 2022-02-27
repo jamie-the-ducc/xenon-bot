@@ -43,7 +43,7 @@ def clear() -> None:
     system("cls" if name in ("nt", "dos") else "clear")
 
 
-def strip_codeblock(codeblock:str) -> str:
+def strip_codeblock(codeblock: str) -> str:
     if codeblock.startswith("```") and codeblock.endswith("```"):
         codeblock = codeblock.removeprefix('```')
         codeblock = codeblock.removesuffix('```')
@@ -104,7 +104,7 @@ def create_config() -> None:
         config.write(configfile)
 
 
-def read_config(init=False):
+def read_config(init = False):
     """Reads the bot configuration file (config.ini) and returns a config object"""
     if init:
         print(f'{INFO} Checking for "config.ini"...')
@@ -145,7 +145,7 @@ def convert_config(items):
     return result
 
 
-def display_bot_info(bot, prefix:str, activities:list):
+def display_bot_info(bot, prefix: str, activities: list):
     ready_time = get_time()
     title()
     
