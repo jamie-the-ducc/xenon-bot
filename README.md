@@ -8,16 +8,16 @@
 
 ## Installation
 
+Make sure you have `discord.py` uninstalled.
+```bash
+python -m pip uninstall -y discord.py
+```
 Clone the repository from GitHub. Then install all the dependencies.
 
 ```bash
 git clone https://github.com/EnbyCosmog/xenon-bot
 cd xenon-bot
-pip install -r requirements.txt
-```
-Make sure you have `discord.py` uninstalled first:
-```bash
-pip uninstall -y discord.py
+python -m pip install -r requirements.txt
 ```
 
 ## Usage
@@ -25,7 +25,8 @@ pip uninstall -y discord.py
 Open `run.bat` to run the script.
 
 ```bash
-run.bat
+Command prompt  ::  run.bat
+Powershell      ::  .\run.bat
 ```
 If you're running the script for the first time, you'll need to fill out some information for the `config.ini` file. It stores important variables such as your bot token and prefix.
 
