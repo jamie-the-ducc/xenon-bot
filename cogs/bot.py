@@ -25,14 +25,17 @@ class Bot(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply('> Please pass in the required arguments')
-        if isinstance(error, commands.MissingPermissions):
-            await ctx.reply("> You don't have sufficient permissions to use this command")
-        if isinstance(error, commands.NotOwner):
-            await ctx.reply("> <:owner:947403810828083210> Sorry, only the owner can use this command.")
+            error = 'Please pass in the required arguments'
+        elif isinstance(error, commands.MissingPermissions):
+            error = "You don't have sufficient permissions to use this command."
+        elif isinstance(error, commands.NotOwner):
+            error = "Only the bot owner can use this command."
+        elif isinstance(error, commands.CommandNotFound):
+            if ctx.invoked_with in reply_dict:
+                return
         else:
             print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} {Fore.RED}Error:{w}", error)
-            await ctx.reply(f"<:no:947393772071825418> An error occured while executing your command:\n```{error}```")
+        await ctx.reply(f"<:no:947393772071825418> An error occured while executing your command:\n```{error}```")
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
