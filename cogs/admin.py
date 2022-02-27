@@ -67,7 +67,7 @@ class Admin(commands.Cog):
 
 
     @commands.command(name="timeout", aliases=['to', 'tmout'])
-    @commands.has_permissions(moderate_members=True)
+    @commands.has_permissions(administrator=True) # moderate_members=True
     async def timeout_member(self, ctx:commands.Context, member:discord.Member=None, minutes:int=None, *, reason:str="No reason provided"):
         if member == None:
             await ctx.reply(f"> Please tag a user to use this command! ({ctx.author.mention})")

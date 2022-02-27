@@ -51,7 +51,8 @@ intents = discord.Intents.default()
 intents.reactions = True
 intents.presences = True
 intents.members = True
-intents.message_content = True
+#intents.message_content = True
+intents = discord.Intents.all()
 
 bot = commands.Bot(
     command_prefix=prefix,
@@ -59,6 +60,7 @@ bot = commands.Bot(
     activity=discord.Activity(type=discord.ActivityType.listening, name=activities[-1]),
     status=discord.Status.idle,
     owner_id=owner,
+    case_insensitive=True,
 )
 
 
