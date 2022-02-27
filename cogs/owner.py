@@ -18,7 +18,7 @@ class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="shutdown", aliases=['sd', 'exit'])
+    @commands.command(name="shutdown", aliases=['sd', 'exit', 'quit', 'close'])
     @commands.is_owner()
     async def shutdown_bot(self, ctx: commands.Context):
         name = "shutdown"
