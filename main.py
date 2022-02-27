@@ -9,11 +9,13 @@
 # | | \  // _ \ | '_ \ / _ \| '_ \  | '_ \| | | | #
 # | | /  \  __/ | | | | (_) | | | |_| |_) | |_| | #
 # | |/_/\_\___| |_| |_|\___/|_| |_(_) .__/ \__, | #
-# |__|       |__|    version 0.2    |_|    |___/  #
+# |__|       |__|  version 0.2.0b   |_|    |___/  #
 # ----------------------------------------------- #
 
 import os
 from asyncio import sleep
+from datetime import timedelta
+from time import time
 
 import aiohttp
 import discord
@@ -23,8 +25,7 @@ from discord.ext import commands
 from discord.ext.tasks import loop
 
 from app.__version__ import __version__
-
-from app.func import get_time, read_config, title
+from app.func import display_bot_info, get_time, read_config, title
 
 w = Style.BRIGHT + Fore.WHITE
 GOOD = f" {w}[{Fore.GREEN}+{w}]"
@@ -64,15 +65,38 @@ bot = commands.Bot(
 )
 
 
+@bot.event
+async def on_ready():
+    print(display_bot_info(bot, prefix, activities))
+    global startTime
+    startTime = time()
+
+
+@bot.command(name="ping", aliases=['l', 'latency'])
+async def get_latency(ctx:commands.Context):
+    name = "ping"
+    ping = int(round(bot.latency, 3) * 1000)
+    uptime = str(timedelta(seconds=int(round(time()-startTime))))
+    await ctx.reply(f"<:stats:947404175761891358> Pong!\n> Latency: `{ping}ms`\n> Uptime: `{uptime}`")
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+    print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
+
+
 # Cogs
 @bot.command()
+@commands.is_owner()
 async def unload(ctx:commands.Context, extension):
-    bot.unload_extension(f'cogs.{extension}')
+    bot.unload_extension(f'cogs.{extension.lower()}')
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Unloaded extension {Fore.YELLOW}cogs.{extension.lower()}{w}")
+    await ctx.reply(f"> Unloaded extension `cogs.{extension}`")
 
 
 @bot.command()
+@commands.is_owner()
 async def load(ctx:commands.Context, extension):
-    bot.load_extension(f'cogs.{extension}')
+    bot.load_extension(f'cogs.{extension.lower()}')
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Loaded extension {Fore.YELLOW}cogs.{extension.lower()}{w}")
+    await ctx.reply(f"> Loaded extension `cogs.{extension}`")
 
 
 # Status changer loop
