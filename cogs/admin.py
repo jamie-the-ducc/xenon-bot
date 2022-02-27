@@ -19,7 +19,7 @@ class Admin(commands.Cog):
         self.bot = bot
 
     # source: https://stackoverflow.com/a/64772835
-    @commands.command(name="welcome", aliases=["w", "setwelcome"])
+    @commands.command(name="setwelcome", aliases=["w", "welcome"])
     @commands.has_permissions(administrator=True)
     async def set_welcome_channel(self, ctx: commands.Context, channel: discord.TextChannel = None):
         """Sets channel that will be used to send messages on member join/leave"""
