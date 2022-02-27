@@ -17,7 +17,6 @@ class General(commands.Cog):
         self.bot = bot
         
 
-    # works
     @commands.command(aliases=['greet'])
     async def hello(self, ctx:commands.Context):
         name = "hello"
@@ -25,7 +24,6 @@ class General(commands.Cog):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-    # works
     @commands.command(name="ping", aliases=['l', 'latency'])
     async def get_latency(self, ctx:commands.Context):
         name = "ping"
@@ -35,7 +33,6 @@ class General(commands.Cog):
         print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
 
 
-    # works
     @commands.command(aliases=['p', 'pfp', 'profile'])
     async def avatar(self, ctx:commands.Context, member:discord.Member=None):
         if member == None:
@@ -45,7 +42,6 @@ class General(commands.Cog):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-    # works
     @commands.command(name="howold", aliases=['o', 'old', 'age'])
     async def discord_timestamp(self, ctx:commands.Context, member:discord.Member=None):
         if member == None:
@@ -58,9 +54,8 @@ class General(commands.Cog):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-    # doesn't work
     @commands.command(name='base64encode', aliases=['b64e', 'b64encode', 'base64e'])
-    async def base64_code(self, ctx:commands.Context, *, base64_string=None):
+    async def base64_encode(self, ctx:commands.Context, *, base64_string=None):
         if base64_string == None:
             await ctx.reply("> Please include the message you want to encode to base64!")
             return
@@ -71,9 +66,8 @@ class General(commands.Cog):
         print(" " * 12 + f"{Fore.CYAN}└>{w} Encoded {Fore.YELLOW}{base64_string}{w} to {Fore.YELLOW}{code}{w} using base64")
 
 
-    # works
     @commands.command(name='base64decode', aliases=['b64d', 'b64decode', 'base64d'])
-    async def base64_code(self, ctx:commands.Context, *, base64_string=None):
+    async def base64_decode(self, ctx:commands.Context, *, base64_string=None):
         if base64_string == None:
             await ctx.reply("> Please include the message you want to decode from base64!")
             return
