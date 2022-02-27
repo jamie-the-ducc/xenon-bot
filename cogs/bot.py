@@ -1,15 +1,11 @@
 import json
 from pathlib import Path
-from datetime import timedelta
-from time import time
 
 import discord
 from colorama import Fore, Style
 from discord.ext import commands
 
-from app.func import (display_bot_info, get_time, read_config, reply_dict,
-                      reply_dict_noprefix)
-
+from app.func import get_time, read_config, reply_dict, reply_dict_noprefix
 
 config = [i[1] for i in read_config()]
 prefix = config[0]
@@ -28,21 +24,14 @@ class Bot(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx:commands.Context, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply('> Please psas in the required arguments')
+            await ctx.reply('> Please pass in the required arguments')
         if isinstance(error, commands.MissingPermissions):
             await ctx.reply("> You don't have sufficient permissions to use this command")
         if isinstance(error, commands.NotOwner):
-            await ctx.reply("> Sorry, only the owner can use this command.")
+            await ctx.reply("> <:owner:947403810828083210> Sorry, only the owner can use this command.")
         else:
-            print(f"{Fore.RED}Error:{w}", error)
- 
- 
-    # works
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(display_bot_info(self.bot, prefix, activities))
-        global startTime
-        startTime = time()
+            print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} {Fore.RED}Error:{w}", error)
+            await ctx.reply(f"<:no:947393772071825418> An error occured while executing your command:\n```{error}```")
 
 
     # works
@@ -93,16 +82,6 @@ class Bot(commands.Cog):
         guilds_dict.pop(str(guild.id))
         with open(GUILDS_JSON, "w", encoding="utf-8") as f:
             json.dump(guilds_dict, f, indent=4, ensure_ascii=False)
-
-
-    @commands.command(name="ping", aliases=['l', 'latency'])
-    async def get_latency(self, ctx:commands.Context):
-        name = "ping"
-        ping = int(round(self.bot.latency, 3) * 1000)
-        uptime = str(timedelta(seconds=int(round(time()-startTime))))
-        await ctx.reply(f"Pong!\n> Latency: `{ping}ms`\n> Uptime: `{uptime}`")
-        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
 
 
 def setup(bot):
