@@ -66,7 +66,7 @@ class Admin(commands.Cog):
         print(" " * 12 + f"{Fore.CYAN}└>{w} Kicked user {Fore.YELLOW}{member}{w} ({Style.DIM}{member.id}{Style.RESET_ALL}{w}) for reason: {Fore.YELLOW}{reason}{w}")
 
 
-    @commands.command(name="timeout", aliases=['to', 'tmout'])
+    @commands.command(name="timeout", aliases=['t', 'tmout'])
     @commands.has_permissions(administrator=True) # moderate_members=True
     async def timeout_member(self, ctx:commands.Context, member:discord.Member=None, minutes:int=None, *, reason:str="No reason provided"):
         if member == None:
