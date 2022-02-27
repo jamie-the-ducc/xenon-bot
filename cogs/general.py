@@ -24,15 +24,6 @@ class General(commands.Cog):
         print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
-    @commands.command(name="ping", aliases=['l', 'latency'])
-    async def get_latency(self, ctx:commands.Context):
-        name = "ping"
-        ping = int(round(self.bot.latency, 3) * 1000)
-        await ctx.reply(f"> Pong! {ping}ms")
-        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
-        print(" " * 12 + f"{Fore.CYAN}└>{w} Bot latency is {Fore.YELLOW}{ping}ms{w}")
-
-
     @commands.command(aliases=['p', 'pfp', 'profile'])
     async def avatar(self, ctx:commands.Context, member:discord.Member=None):
         if member == None:
