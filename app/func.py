@@ -1,6 +1,5 @@
 from configparser import ConfigParser
 from datetime import datetime
-from json import loads
 from os import name, system
 from os.path import isfile
 from pathlib import Path
