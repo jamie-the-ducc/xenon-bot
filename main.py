@@ -1,7 +1,7 @@
-# [Xe]non Bot for Discord
-# Written with 💜 by [Jam!3]#4466
-# Began: 15/02/2022
-# Last updated: 26/02/2022
+# Xenon Bot for Discord
+# Coded with 💜 by [Jam!3]#4466
+# Started: 15/02/2022
+# Last updated: 02/03/2022
 
 # ----------------------------------------------- #
 #  ____  __   __                                  #
@@ -9,7 +9,7 @@
 # | | \  // _ \ | '_ \ / _ \| '_ \  | '_ \| | | | #
 # | | /  \  __/ | | | | (_) | | | |_| |_) | |_| | #
 # | |/_/\_\___| |_| |_|\___/|_| |_(_) .__/ \__, | #
-# |__|       |__|  version 0.2.0b   |_|    |___/  #
+# |__|       |__|  version 0.2.1b   |_|    |___/  #
 # ----------------------------------------------- #
 
 import os
@@ -48,12 +48,12 @@ prefix, token, webhook, owner, activities, status_delay = [i[1] for i in read_co
 activities = activities.split(',')
 
 # source: https://discordpy.readthedocs.io/en/stable/intents.html
-intents = discord.Intents.default()
-intents.reactions = True
-intents.presences = True
-intents.members = True
-intents.message_content = True
-#intents = discord.Intents.all()
+#intents = discord.Intents.default()
+#intents.reactions = True
+#intents.presences = True
+#intents.members = True
+#intents.message_content = True
+intents = discord.Intents.all()
 
 bot = commands.Bot(
     command_prefix=prefix,
@@ -85,7 +85,10 @@ async def get_latency(ctx:commands.Context):
 # Cogs
 @bot.command()
 @commands.is_owner()
-async def unload(ctx:commands.Context, extension):
+async def unload(ctx: commands.Context, extension = None):
+    if extension == None:
+        await ctx.reply(f"<:no:947393772071825418> An error occured while executing your command:\n```Please include a cog extension to use this command```")
+        return
     bot.unload_extension(f'cogs.{extension.lower()}')
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Unloaded extension {Fore.YELLOW}cogs.{extension.lower()}{w}")
     await ctx.reply(f"> Unloaded extension `cogs.{extension}`")
@@ -93,10 +96,25 @@ async def unload(ctx:commands.Context, extension):
 
 @bot.command()
 @commands.is_owner()
-async def load(ctx:commands.Context, extension):
+async def load(ctx: commands.Context, extension = None):
+    if extension == None:
+        await ctx.reply(f"<:no:947393772071825418> An error occured while executing your command:\n```Please include a cog extension to use this command```")
+        return
     bot.load_extension(f'cogs.{extension.lower()}')
     print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Loaded extension {Fore.YELLOW}cogs.{extension.lower()}{w}")
     await ctx.reply(f"> Loaded extension `cogs.{extension}`")
+
+
+@bot.command(aliases=['refresh'])
+@commands.is_owner()
+async def reload(ctx: commands.Context, extension = None):
+    if extension == None:
+        await ctx.reply(f"<:no:947393772071825418> An error occured while executing your command:\n```Please include a cog extension to use this command```")
+        return
+    bot.unload_extension(f'cogs.{extension.lower()}')
+    bot.load_extension(f'cogs.{extension.lower()}')
+    print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Reloaded extension {Fore.YELLOW}cogs.{extension.lower()}{w}")
+    await ctx.reply(f"> Reloaded extension `cogs.{extension}`")
 
 
 # Status changer loop

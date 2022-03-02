@@ -24,7 +24,6 @@ reply_dict = {
 
 reply_dict_noprefix = {
     "hi":"> Hi!",
-    "hello": "> Hello!",
     "rick":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
     "rick roll":"https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713",
     "reply":"> I replied!",
@@ -35,39 +34,6 @@ reply_dict_noprefix = {
     "flush":"<:flush_v2:946581195737665577>",
     "ducc":"<:ducc:946920331828920430>",
     "katt":"<:katt:946919968698667020>",
-}
-
-
-command_dict = {
-    "general":{
-        "hello":{"alias":["greet"], "usage":f"{prefix}hello", "description":"Relies to the sender"},
-        "avatar":{"alias":["p", "pfp", "profile"], "usage":f"{prefix}avatar <@member>", "description":"Sends the profile picture of the mentioned member"},
-        "howold":{"alias":["o", "old", "age"], "usage":f"{prefix}howold <@user_tag>", "description":"Sends the account creation date of the mentioned member"},
-        "b64encode":{"alias":["b64e", "base64e", "base64encode"], "usage":f"{prefix}b64encode [code block]", "description":"Encodes provided message to base64"},
-        "b64decode":{"alias":["b64d", "base64d", "base64decode"], "usage":f"{prefix}b64decode [code block]", "description":"Decodes provided base64 to message"},
-        "rickroll":{"alias":["rick"], "usage":f"{prefix}rickroll", "description":"Sends rickroll gif 😏"},
-        "info":{"alias":[""], "usage":f"{prefix}info", "description":"Replies with bot name and developer nfo"},
-        "invite":{"alias":[""], "usage":f"{prefix}invite", "description":"Sends invite URL for the bot"},
-    },
-    "admin":{
-        "setwelcome":{"alias":["w", "welcome"], "usage":f"{prefix}setwelcome <#channel_tag>", "description":"Sets mentioned channel for member join/leave messages"},
-        "kick":{"alias":[""], "usage":f"{prefix}kick [@member] <reason>", "description":"Kicks mentioned member from the server"},
-        "ban":{"alias":[""], "usage":f"{prefix}ban [@member] <reason>", "description":"Bans mentioned member from the server"},
-        "unban":{"alias":[""], "usage":f"{prefix}unban [@member]", "description":"Unans mentioned member in the server"},
-        "timeout":{"alias":["t", "tmout"], "usage":f"{prefix}timeout [@member] [time (minutes)] <reason>", "description":"Timesout mentioned member in the server for a specified amount of time"},
-    },
-    "owner":{
-        "shutdown":{"alias":["sd", "exit", "quit", "close"], "usage":f"{prefix}shutdown", "description":"Turns off the bot"},
-        "eval":{"alias":["e", "exec", "evaluate"], "usage":f"{prefix}eval [code block]", "description":"Evaluates the given python code block and rerturns results"},
-    },
-    "prefixless":{
-        "rick roll":{"alias":["rick"], "usage":"rick roll", "description":"Sends rickroll gif 😏"},
-        "hello":{"alias":["hi", "reply"], "usage":"hello", "description":"Replies to the sender"},
-        "flush":{"alias":[""], "usage":"flush", "description":"Sends the flush emote <:flush_v2:946581195737665577>"},
-    },
-    "demo":{
-        "":{"alias":[""], "usage":f"{prefix}", "description":""},
-    }
 }
 
 

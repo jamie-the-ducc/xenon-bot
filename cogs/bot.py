@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from base64 import b64decode
 
 import discord
 from colorama import Fore, Style
@@ -49,6 +50,18 @@ class Bot(commands.Cog):
         elif msg in reply_dict_noprefix and message.author is not self.bot.user:
             await message.reply(reply_dict_noprefix[msg])
             print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{name}{w} in {Fore.YELLOW}#{message.channel}{w} from {Fore.YELLOW}{message.author} {w}({Style.DIM}{message.author.id}{Style.RESET_ALL}{w})")
+            
+        with open(Path.cwd() / "app" / "word_blacklist.txt", 'r') as f:
+            censored_list = b64decode(f.read()).decode('utf8').split(',')
+            
+            if message.author is not self.bot.user:
+                content = message.content.lower().split(' ')
+                for word in content:
+                    if word in censored_list:
+                        await message.delete()
+                        await message.channel.send(f"> {message.author.mention}, your message was deleted because it contained an inappropriate word.")
+                        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Deleted censored word {Fore.GREEN}{word}{w} in {Fore.YELLOW}#{message.channel}{w} from {Fore.YELLOW}{message.author} {w}({Style.DIM}{message.author.id}{Style.RESET_ALL}{w})")
+                        return
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):

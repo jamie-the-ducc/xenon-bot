@@ -7,28 +7,29 @@ import discord
 from colorama import Fore, Style
 from discord.ext import commands
 
-from app.func import get_time, read_config, strip_codeblock
+from app.func import get_time, strip_codeblock
 
 
 w = Style.BRIGHT + Fore.WHITE
-prefix = [i[1] for i in read_config()][0]
 
 
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="shutdown", aliases=['sd', 'exit', 'quit', 'close'])
+    @commands.command(name="shutdown", aliases=['sd', 'exit', 'quit', 'close', "logout"])
     @commands.is_owner()
     async def shutdown_bot(self, ctx: commands.Context):
+        """Turns off the bot"""
         name = "shutdown"
         await ctx.reply("> Turning off bot...")
-        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{ctx.prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
         await self.bot.close()
         
     @commands.command(name="eval", aliases=["e", "exec", "evaluate"])
     @commands.is_owner()
     async def _eval(self, ctx: commands.Context, *, code = None):
+        """Evaluates given python code block and rerturns results"""
         if code == None:
             await ctx.reply("> Please attach a code block to this command!")
             return
@@ -62,7 +63,7 @@ class Owner(commands.Cog):
             
         reply = f"{msg}\n```bash\n{result}\n```"
         await ctx.reply(reply)
-        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
+        print(f" {Style.DIM}({get_time()}){Style.RESET_ALL}{w} Recieved command {Fore.GREEN}{ctx.prefix}{name}{w} in {Fore.YELLOW}#{ctx.channel}{w} from {Fore.YELLOW}{ctx.author} {w}({Style.DIM}{ctx.author.id}{Style.RESET_ALL}{w})")
 
 
 def setup(bot):
